@@ -3,12 +3,23 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/mux"
 )
 
+func ReadBook(w http.ResponseWriter, r *http.Request) {
+    vars := mux.Vars(r)
+    title := vars["title"]
+    fmt.Fprintf(w, "Du läser boken: %s\n", title)
+}
+
+
 func main() {
 	route := mux.NewRouter()
+
+	// Route: /books/{title} (GET)
+    route.HandleFunc("/books/{title}", ReadBook).Methods("GET")
 
     route.HandleFunc("/books/{title}/page/{page}", func(w http.ResponseWriter, r *http.Request) {
         vars := mux.Vars(r)
@@ -18,11 +29,26 @@ func main() {
         fmt.Fprintf(w, "You've requested the book: %s on page %s\n", title, page)
     })
 
-
+	// Route: / - list all routes
 	route.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        fmt.Fprintf(w, "Hello, you've requested the URL path: %s\n", r.URL.Path)
-    })
+	    var routes []string
+	    route.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
+	        path, _ := route.GetPathTemplate()
+	        methods, _ := route.GetMethods()
+	        routeStr := fmt.Sprintf("%s %s", methods, path)
+	        routes = append(routes, routeStr)
+	        return nil
+	    })
+	
+	    w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	    fmt.Fprintf(w, "<h1>Registrerade routes</h1><ul>")
+	    for _, route := range routes {
+	        fmt.Fprintf(w, `<li><a href="%s">%s</a></li>`, strings.Split(route, " ")[1], route)
+	    }
+	    fmt.Fprintf(w, "</ul>")
+	})   
 
+	// Route: /static - file server
 	fs := http.FileServer(http.Dir("static/"))
     http.Handle("/static/", http.StripPrefix("/static/", fs))
 
