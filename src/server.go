@@ -8,17 +8,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func ReadBook(w http.ResponseWriter, r *http.Request) {
-    vars := mux.Vars(r)
-    title := vars["title"]
-    fmt.Fprintf(w, "Du läser boken: %s\n", title)
-}
-
-
 func main() {
 	route := mux.NewRouter()
 
-	// Route: /books/{title} (GET)
+	// Route: /books/{title} (GET) ReadBook in handlers.go
     route.HandleFunc("/books/{title}", ReadBook).Methods("GET")
 
     route.HandleFunc("/books/{title}/page/{page}", func(w http.ResponseWriter, r *http.Request) {
@@ -45,6 +38,7 @@ func main() {
 	    for _, route := range routes {
 	        fmt.Fprintf(w, `<li><a href="%s">%s</a></li>`, strings.Split(route, " ")[1], route)
 	    }
+		fmt.Fprintf(w, "<li><a href=\"/static/\">/static</a></li>")
 	    fmt.Fprintf(w, "</ul>")
 	})   
 
