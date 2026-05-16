@@ -14,6 +14,7 @@ func main() {
 	// Route: /books/{title} (GET) ReadBook in handlers.go
     route.HandleFunc("/books/{title}", ReadBook).Methods("GET")
 
+	// Route: /books/{title}/page/{page}	
     route.HandleFunc("/books/{title}/page/{page}", func(w http.ResponseWriter, r *http.Request) {
         vars := mux.Vars(r)
         title := vars["title"]
