@@ -16,7 +16,7 @@ func CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func print_password() {
+func print_password() bool {
 	password := "secret"
 	hash, _ := HashPassword(password) // ignore error for the sake of simplicity
 
@@ -25,4 +25,6 @@ func print_password() {
 
 	match := CheckPasswordHash(password, hash)
 	fmt.Println("Match:   ", match)
+
+	return match
 }
