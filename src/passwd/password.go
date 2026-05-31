@@ -26,9 +26,3 @@ func print_password() {
 	match := CheckPasswordHash(password, hash)
 	fmt.Println("Match:   ", match)
 }
-
-/*
-func main() {
-	print_password()
-}
-*/
