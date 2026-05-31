@@ -1,0 +1,38 @@
+# Binärer för program och plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test-binärer (byggda med `go test -c`)
+*.test
+
+# Output från go coverage tool
+*.out
+coverage.*
+*.coverprofile
+profile.cov
+
+# Beroendemapp (ta bort kommentaren om du använder vendor)
+# vendor/
+
+# Go workspace filer
+go.work
+go.work.sum
+
+# Miljövariabler och secrets (VIKTIGT)
+.env
+.env.local
+.env.*.local
+
+# IDE-specifika filer (VS Code, GoLand, etc.)
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Operativsystem
+.DS_Store
+Thumbs.db   

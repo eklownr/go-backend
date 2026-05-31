@@ -3,6 +3,12 @@
 - mux router
 - file sever on "/static"
 
+## Kör test
+
+```bash
+go test -v ./src/ ./src/passwd/
+```
+
 ## Bygg docker image:
 
 ```bash
