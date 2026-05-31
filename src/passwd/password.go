@@ -1,4 +1,4 @@
-package main
+package passwd
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 )
 
 func HashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 	return string(bytes), err
 }
 
@@ -16,7 +16,7 @@ func CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func main() {
+func print_password() {
 	password := "secret"
 	hash, _ := HashPassword(password) // ignore error for the sake of simplicity
 
@@ -25,4 +25,8 @@ func main() {
 
 	match := CheckPasswordHash(password, hash)
 	fmt.Println("Match:   ", match)
+}
+
+func main() {
+	print_password()
 }

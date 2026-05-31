@@ -11,18 +11,6 @@ import (
 func main() {
 	route := mux.NewRouter()
 
-	// Route: /books/{title} (GET) ReadBook in handlers.go
-    route.HandleFunc("/books/{title}", ReadBook).Methods("GET")
-
-	// Route: /books/{title}/page/{page}	
-    route.HandleFunc("/books/{title}/page/{page}", func(w http.ResponseWriter, r *http.Request) {
-        vars := mux.Vars(r)
-        title := vars["title"]
-        page := vars["page"]
-
-        fmt.Fprintf(w, "You've requested the book: %s on page %s\n", title, page)
-    })
-
 	// Route: / - list all routes
 	route.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 	    var routes []string
@@ -35,18 +23,30 @@ func main() {
 	    })
 	
 	    w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	    fmt.Fprintf(w, "<h1>Registrerade routes</h1><ul>")
+	    fmt.Fprintf(w, "<h1>Registered routes</h1><ul>")
 	    for _, route := range routes {
 	        fmt.Fprintf(w, `<li><a href="%s">%s</a></li>`, strings.Split(route, " ")[1], route)
 	    }
-		fmt.Fprintf(w, "<li><a href=\"/static/\">/static</a></li>")
 	    fmt.Fprintf(w, "</ul>")
-	})   
+	}).Methods("GET")   
 
-	// Route: /static - file server
-	fs := http.FileServer(http.Dir("static/"))
-    http.Handle("/static/", http.StripPrefix("/static/", fs))
+	// Route: /books/{title}/page/{page}	
+    route.HandleFunc("/books/{title}/page/{page}", func(w http.ResponseWriter, r *http.Request) {
+        vars := mux.Vars(r)
+        title := vars["title"]
+        page := vars["page"]
 
+        fmt.Fprintf(w, "You've requested the book: %s on page %s\n", title, page)
+    }).Methods("GET")
+
+	// Route: /books/{title} (GET) ReadBook in handlers.go
+    route.HandleFunc("/books/{title}", ReadBook).Methods("GET")
+
+	// Static html
+	fs := http.FileServer(http.Dir("static"))
+	route.PathPrefix("/static/static.html").Handler(http.StripPrefix("/static/", fs)).Methods("GET")   
+
+	// Running server
 	port := "8888"
     fmt.Printf("Servern körs på http://localhost:%s\n", port)
     http.ListenAndServe(":" + port, route)
