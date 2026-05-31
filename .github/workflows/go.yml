@@ -1,0 +1,29 @@
+name: Go Tests
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checka ut koden
+      - uses: actions/checkout@v4
+
+      # 2. Installera Go (använder versionen specificerad i din go.mod om du utelämnar 'go-version')
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.26.2" # Ändra till den version du använder, t.ex. 1.21 eller låt den läsa från go.mod
+
+      # 3. Installera beroenden (valfritt, 'go test' gör detta ofta automatiskt men bra för tydlighet)
+      - name: Download dependencies
+        run: go mod download
+
+      # 4. Kör testen med verbose flagga (-v) för att se utskrifter
+      - name: Run tests
+        run: go test -v ./...
