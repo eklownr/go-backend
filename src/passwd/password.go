@@ -27,6 +27,8 @@ func print_password() {
 	fmt.Println("Match:   ", match)
 }
 
+/*
 func main() {
 	print_password()
 }
+*/
