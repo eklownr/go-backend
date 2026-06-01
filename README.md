@@ -2,6 +2,8 @@
 
 - mux router
 - file sever on "/static"
+- go test
+- docker
 
 ## Kör test
 
